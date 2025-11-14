@@ -25,19 +25,19 @@
 import subprocess
 from time import sleep
 import FreeCAD, FreeCADGui
- 
+
 simfile = "C:/Users/Public/Documents/FastFieldSolvers/FasterCap/3D/array_of_5_spheres.lst"
 simengine = 'C:/Program Files (x86)/FastFieldSolvers/FasterCap/fastercap.exe'
 
 p=subprocess.Popen([simengine, "-b", "-a0.001", "-ap", simfile],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
- 
+
 while True:
   myline = p.stdout.readline()
   if myline:
     App.Console.PrintMessage(myline)
   if not myline:
     break
-  
+
 lastout = p.communicate()
 App.Console.PrintMessage(lastout)
 

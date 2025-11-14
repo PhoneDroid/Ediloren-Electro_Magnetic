@@ -25,7 +25,6 @@
 ################################################################################
 
 
-
 __title__="FreeCAD E.M. Workbench FastHenry Path Class"
 __author__ = "FastFieldSolvers S.R.L."
 __url__ = "http://www.fastfieldsolvers.com"

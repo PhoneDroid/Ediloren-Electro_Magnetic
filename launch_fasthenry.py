@@ -27,12 +27,12 @@
 import subprocess
 from time import sleep
 import FreeCAD, FreeCADGui
- 
+
 simfile = "C:/Users/Public/Documents/FastFieldSolvers/FastHenry2/pin-con7.inp"
 simengine = 'C:/Program Files (x86)/FastFieldSolvers/FastHenry2/FastHenry2.exe'
 
 p=subprocess.Popen([simengine, "-b", "-a0.001", "-ap", simfile],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
- 
+
 while True:
   myline = p.stdout.readline()
   if myline:

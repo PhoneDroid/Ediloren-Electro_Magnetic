@@ -1,8 +1,6 @@
 # SPDX-License-Identifier: LGPL-2.1-or-later
 # SPDX-FileNotice: Part of the ElectroMagnetic addon.
 
-import FreeCAD, Mesh, Part, MeshPart, DraftGeomUtils, os
-from FreeCAD import Vector
 ################################################################################
 #                                                                              #
 #   © 2018 FastFieldSolvers S.R.L. ( http://www.fastfieldsolvers.com )         #
@@ -23,6 +21,8 @@ from FreeCAD import Vector
 #                                                                              #
 ################################################################################
 
+import FreeCAD, Mesh, Part, MeshPart, DraftGeomUtils, os
+from FreeCAD import Vector
 
 if FreeCAD.GuiUp:
     import FreeCADGui
@@ -40,15 +40,15 @@ DEF_FOLDER = "."
 
 def export_mesh(filename, meshobj=None, isDiel=False, showNormals=False, folder=DEF_FOLDER):
     '''Export mesh in FasterCap format as conductor or dielectric interface
-    
+
     'filename' is the name of the export file
     'meshobj' must be a Mesh::Feature object
-    'isDiel' specifies if the mesh is a dielectric, so the function will add 
+    'isDiel' specifies if the mesh is a dielectric, so the function will add
         a reference point to each panel to indicate which is the external side (outside)
-    'showNormals' will add a compound object composed by a set of arrows showing the 
+    'showNormals' will add a compound object composed by a set of arrows showing the
         normal direction for each panel
     'folder' is the folder in which 'filename' will be saved
-    
+
     Example:
     mymeshGui = Gui.ActiveDocument.Mesh
     mymeshObj = mymeshGui.Object
@@ -61,10 +61,10 @@ def export_mesh(filename, meshobj=None, isDiel=False, showNormals=False, folder=
     elif meshobj.TypeId != "Mesh::Feature":
         FreeCAD.Console.PrintMessage("Error: 'meshobj' is not an object of type 'Mesh::Feature'")
         return
-    
+
     if not os.path.isdir(folder):
         os.mkdir(folder)
-        
+
     with open(folder + os.sep + filename, 'w') as fid:
         # write the preamble
         if isDiel == True:
@@ -108,11 +108,11 @@ def export_mesh(filename, meshobj=None, isDiel=False, showNormals=False, folder=
                 if isDiel == True:
                     fid.write(" ")
                     for i in range(3):
-                        fid.write(" " + str(refpoint[i]))           
+                        fid.write(" " + str(refpoint[i]))
             fid.write("\n")
             if showNormals == True:
                 arrows.append(make_arrow(center, refpoint))
-        
+
         if showNormals == True:
             # add the vector normals visualization to the view
             # Note: could also use Part.show(normals) but in this case we could
@@ -125,7 +125,7 @@ def export_mesh(filename, meshobj=None, isDiel=False, showNormals=False, folder=
 
 def make_arrow(startpoint, endpoint):
     '''Create an arrow
-    
+
     'startpoint' is a Vector specifying the start position
     'endpoint' is a Vector specifying the end position
 '''
@@ -140,27 +140,27 @@ def make_arrow(startpoint, endpoint):
     base = startpoint + base
     # radius2 is calculated for a fixed arrow head angle tan(15deg)=0.27
     cone = Part.makeCone(0.2 * len * 0.27, 0.0, 0.2 * len, base, dir, 360)
-    
+
     # add the compound representing the arrow
     arrow = Part.makeCompound([line, cone])
-    
+
     return arrow
-    
+
 def export_faces(filename, isDiel=False, name="", showNormals=False, forceMesh=False, folder=DEF_FOLDER):
     '''Export faces in FasterCap format as conductor or dielectric interface
-    
+
     The function operates on the selection. The selection can be a face, a compound or a solid.
     'filename' is the name of the export file
-    'isDiel' specifies if the mesh is a dielectric, so the function will add 
+    'isDiel' specifies if the mesh is a dielectric, so the function will add
         a reference point to each panel to indicate which is the external side (outside)
     'name' is the name of the conductor created in the file. If not specified, defaults
         to the label of the first element in the selection set
     'forceMesh' force the meshing of all faces, even if they could be exported non-meshed
         (triangular or quadrilateral faces).
-    'showNormals' will add a compound object composed by a set of arrows showing the 
+    'showNormals' will add a compound object composed by a set of arrows showing the
         normal direction for each panel
     'folder' is the folder in which 'filename' will be saved
-    
+
     Example:
     export_faces("mymesh.txt", folder="C:/temp")
 '''
@@ -169,7 +169,7 @@ def export_faces(filename, isDiel=False, name="", showNormals=False, forceMesh=F
     # if no valid selection was passed
     if sel == None:
         return
-    
+
     if name == "":
         condName = sel[0].Label.replace(" ","_")
     else:
@@ -210,10 +210,10 @@ def export_faces(filename, isDiel=False, name="", showNormals=False, forceMesh=F
     for facet in facets:
         points = [ Vector(x) for x in facet.Points]
         panels.append( [points, Vector(facet.Normal)] )
-        
+
     if not os.path.isdir(folder):
         os.mkdir(folder)
-        
+
     with open(folder + os.sep + filename, 'w') as fid:
         # write the preamble
         if isDiel == True:
@@ -224,7 +224,7 @@ def export_faces(filename, isDiel=False, name="", showNormals=False, forceMesh=F
             fid.write("* - " + obj.Label + "\n")
         fid.write("* created using FreeCAD's ElectroMagnetic workbench\n")
         fid.write("* see http://www.freecad.org and http://www.fastfieldsolvers.com\n\n")
-    
+
         arrows = []
         # export faces
         for panel in panels:
@@ -259,13 +259,13 @@ def export_faces(filename, isDiel=False, name="", showNormals=False, forceMesh=F
                 if isDiel == True:
                     fid.write(" ")
                     for i in range(3):
-                        fid.write(" " + str(refpoint[i]))           
+                        fid.write(" " + str(refpoint[i]))
             fid.write("\n")
             if showNormals == True:
                 arrows.append(make_arrow(center, refpoint))
-        
+
     fid.closed
-    
+
     if showNormals == True:
         # add the vector normals visualization to the view
         # Note: could also use Part.show(normals) but in this case we could
@@ -274,4 +274,4 @@ def export_faces(filename, isDiel=False, name="", showNormals=False, forceMesh=F
         normalobj = FreeCAD.ActiveDocument.addObject("Part::Feature","Normals")
         normalobj.Shape = normals
 
-    
+

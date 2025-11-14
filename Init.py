@@ -1,8 +1,6 @@
 # SPDX-License-Identifier: LGPL-2.1-or-later
 # SPDX-FileNotice: Part of the ElectroMagnetic addon.
 
-# add import/export types
-#FreeCAD.addExportType("FastHenry file format (*.inp)","exportFH")
 ################################################################################
 #                                                                              #
 #   © 2018 Efficient Power Conversion Corporation, Inc. ( http://epc-co.com )  #
@@ -27,3 +25,5 @@
 ################################################################################
 
 
+# add import/export types
+#FreeCAD.addExportType("FastHenry file format (*.inp)","exportFH")
