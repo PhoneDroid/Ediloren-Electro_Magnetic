@@ -90,3 +90,4 @@ def go(c='s'):
 
 #import EM_FHPlaneHole
 #EM_FHPlaneHole._CommandFHPlaneHole().Activated()
+# SPDX-FileNotice: Part of the ElectroMagnetic addon.

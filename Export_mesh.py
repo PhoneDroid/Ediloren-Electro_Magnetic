@@ -22,6 +22,7 @@
 #***************************************************************************
 
 # SPDX-License-Identifier: LGPL-2.1-or-later
+# SPDX-FileNotice: Part of the ElectroMagnetic addon.
 
 import FreeCAD, Mesh, Part, MeshPart, DraftGeomUtils, os
 from FreeCAD import Vector
